@@ -456,23 +456,28 @@
   let currentLang = "en";
 
   // ⬇️ ВСТАВЬТЕ СЮДА ВАШ URL из Google Apps Script (шаг 4 инструкции)
-  const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxSbyCU9qNdSAcaIhkTZtWXbX-oWCjTFqVqPoTmDrXf85khYY8rNHfsVY00fmvXUZP_SA/exec';
+  const WEBHOOK_URL = 'ВСТАВЬТЕ_ВАШ_URL_СЮДА';
 
   // Отправка в Google Sheets (через Apps Script)
+  let _sending = false;
   async function sendWebhook(payload) {
     if (!WEBHOOK_URL || WEBHOOK_URL.includes('ВСТАВЬТЕ')) {
-      console.warn('⚠️ Google Apps Script URL не настроен. Данные не отправлены.');
+      console.warn('⚠️ Google Apps Script URL не настроен.');
       return;
     }
+    if (_sending) return;
+    _sending = true;
     try {
       await fetch(WEBHOOK_URL, {
         method: 'POST',
-        mode: 'no-cors', // нужно для Google Apps Script с GitHub Pages
+        mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
     } catch(e) {
       console.warn('Ошибка отправки:', e);
+    } finally {
+      setTimeout(() => { _sending = false; }, 3000);
     }
   }
 
