@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Ментальное здоровье | PHQ-9, GAD-7, C-SSRS | Результаты и интерпретация</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, 'Segoe UI', 'Inter', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f2f5f9;
+      padding: 24px 20px;
+      color: #1a2c3e;
+    }
+
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f9fafc;
+      --text-primary: #1e2f3e;
+      --text-secondary: #4a627a;
+      --border-light: #e2e8f0;
+      --border-med: #cbd5e1;
+      --accent: #2c6e9e;
+      --accent-hover: #1f5680;
+      --warning-bg: #fff9eb;
+      --warning-border: #fcd34d;
+      --warning-text: #b45309;
+      --success-bg: #e3f7f0;
+      --success-text: #0f6e5c;
+      --radius-md: 14px;
+      --radius-lg: 24px;
+      --error-border: #e53e3e;
+      --error-bg: #fff5f5;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      background: linear-gradient(115deg, #1a3c4e 0%, #10313f 100%);
+      border-radius: 32px;
+      padding: 32px 28px;
+      margin-bottom: 32px;
+      box-shadow: 0 12px 24px -12px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: white;
+      margin-bottom: 8px;
+    }
+
+    .hero p {
+      font-size: 1rem;
+      color: #cbdde9;
+      margin-top: 6px;
+    }
+
+    .lang-bar {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .lang-btn {
+      background: white;
+      border: 1px solid var(--border-med);
+      padding: 8px 24px;
+      border-radius: 60px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #2c4c6c;
+    }
+
+    .lang-btn.active {
+      background: #1e4b6e;
+      border-color: #1e4b6e;
+      color: white;
+    }
+
+    .card {
+      background: var(--bg-primary);
+      border-radius: var(--radius-lg);
+      padding: 28px 28px 32px;
+      margin-bottom: 32px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      border: 1px solid var(--border-light);
+    }
+
+    .card h2 {
+      font-size: 1.7rem;
+      font-weight: 600;
+      color: #0c3146;
+      margin-bottom: 8px;
+    }
+
+    .card-desc {
+      font-size: 0.9rem;
+      color: #5f7f9a;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border-light);
+      padding-bottom: 10px;
+    }
+
+    .personal-grid {
+      background: var(--bg-secondary);
+      border-radius: 20px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      border: 1px solid var(--border-light);
+    }
+
+    .section-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 18px;
+      color: #1f4762;
+    }
+
+    .two-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .field-group {
+      margin-bottom: 16px;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #466482;
+      margin-bottom: 6px;
+      letter-spacing: 0.3px;
+    }
+
+    .required-star {
+      color: #e53e3e;
+      margin-left: 4px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 0.9rem;
+      border: 1px solid var(--border-med);
+      border-radius: 16px;
+      background: white;
+      transition: 0.2s;
+      font-family: inherit;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(44,110,158,0.15);
+    }
+
+    input.error-input, select.error-input {
+      border-color: #e53e3e;
+      background-color: #fff5f5;
+    }
+
+    .question-block {
+      background: #fefefe;
+      border: 1px solid #e9edf2;
+      border-radius: 20px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      transition: all 0.1s;
+    }
+
+    .q-text {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 16px;
+      line-height: 1.45;
+      color: #1a4058;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .opt-label {
+      background: #ffffff;
+      border: 1px solid #d4dfec;
+      border-radius: 60px;
+      padding: 8px 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .opt-label:hover {
+      background: #ecf3fa;
+    }
+
+    .yesno-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 16px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+
+    button.submit {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button.submit:hover {
+      background: var(--accent-hover);
+    }
+
+    button.reset-btn {
+      background: transparent;
+      border: 1px solid var(--border-med);
+      padding: 12px 30px;
+      border-radius: 40px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .result-box {
+      margin-top: 20px;
+      padding: 18px 22px;
+      border-radius: 20px;
+      background: var(--success-bg);
+      border-left: 5px solid #2c947c;
+      display: none;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .result-score {
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: #0f5c50;
+      margin-bottom: 8px;
+    }
+
+    .result-interpret {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed #9fcbc1;
+      color: #1e6b5e;
+    }
+
+    .warning-card {
+      background: var(--warning-bg);
+      border: 1px solid var(--warning-border);
+      border-radius: 28px;
+      padding: 24px 28px;
+      margin-top: 16px;
+    }
+
+    .warning-card h3 {
+      font-size: 1.1rem;
+      color: var(--warning-text);
+      margin-bottom: 10px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 28px;
+      font-size: 0.7rem;
+      color: #6b8aaa;
+    }
+
+    @media (max-width: 680px) {
+      body { padding: 16px; }
+      .two-cols { grid-template-columns: 1fr; gap: 0; }
+      .card { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="hero">
+    <h1 id="mainTitle">Mental Health Screening Platform</h1>
+    <p id="mainSub">PHQ-9 · GAD-7 · C‑SSRS | результаты и интерпретация</p>
+  </div>
+
+  <div class="lang-bar">
+    <button class="lang-btn active" data-lang="en">🇬🇧 English</button>
+    <button class="lang-btn" data-lang="ru">🇷🇺 Русский</button>
+    <button class="lang-btn" data-lang="kk">🇰🇿 Қазақша</button>
+  </div>
+
+  <div id="dynamicForms"></div>
+
+  <div class="warning-card" id="warningBlock"></div>
+  <footer>🧠 Опросники — инструменты скрининга. Результаты носят ознакомительный характер. При суицидальных мыслях обратитесь к специалисту немедленно.</footer>
+</div>
+
+<script>
+  // ======================= МУЛЬТИЯЗЫЧНЫЙ КОНТЕНТ С ИНТЕРПРЕТАЦИЕЙ =======================
+  const TRANSLATIONS = {
+    en: {
+      mainTitle: "Mental Health Screening Platform",
+      mainSub: "PHQ-9 · GAD-7 · C‑SSRS | results & interpretation",
+      personalInfo: "📋 Personal Information (required except program)",
+      fullName: "Full Name *", fullNamePl: "John Smith",
+      email: "Email *", emailPl: "your@email.com",
+      phone: "Phone (emergency) *", phonePl: "+7 (777) 123-4567",
+      eduProgram: "Educational Program (optional)", eduProgramPl: "e.g., General Medicine",
+      faculty: "School / Faculty *", faculties: ["Medicine","Pediatrics","Dentistry","Pharmacy","Preventive Medicine","Public Health","Nursing","Residency","Master's","Doctoral (PhD)","Post-Doctoral","Not studying"],
+      groupNum: "Group Number *", groupNumPl: "e.g., 302",
+      courseYear: "Year of Study *", courseYears: ["1st year","2nd year","3rd year","4th year","5th year","6th year","Not applicable"],
+      phq9Title: "📝 PHQ-9 Depression Questionnaire", phq9Desc: "Over the last 2 weeks, how often have you been bothered by the following problems?",
+      gad7Title: "🌿 GAD-7 Anxiety Questionnaire", gad7Desc: "Over the last 2 weeks, how often have you been bothered by the following problems?",
+      cssrsTitle: "⚠️ C‑SSRS Suicide Risk Screener", cssrsDesc: "Columbia Suicide Severity Rating Scale",
+      options: ["Not at all (0)", "Several days (1)", "More than half the days (2)", "Nearly every day (3)"],
+      yesNo: ["No (0)", "Yes (1)"],
+      submit: "Submit & See Results", reset: "Reset",
+      requiredFieldsMsg: "Please fill in all required personal fields: Full Name, Email, Phone, Faculty, and Group/Course (if student).",
+      phq9Qs: ["Little interest or pleasure","Feeling down, depressed","Sleep problems","Fatigue / low energy","Appetite changes","Feeling bad about yourself","Concentration difficulties","Psychomotor changes","Suicidal thoughts / self-harm"],
+      gad7Qs: ["Nervous / anxious","Cannot stop worrying","Worrying too much","Trouble relaxing","Restlessness","Easily annoyed","Fear of something awful"],
+      cssrsQs: ["Wish to be dead (past month)","Suicidal thoughts (past month)","Method thinking (if Yes to Q2)","Intention to act (High Risk)","Planning details (High Risk)","Describe any actions/preparation (Lifetime / 3 months)"],
+      cssrsLastPlaceholder: "Describe any actions, preparations, or attempts. If none, write 'None'.",
+      warningTitle: "📢 Important Notice", warningText: "These are screening tools. If you have suicidal thoughts, seek professional help immediately.",
+      interpretation: {
+        phq9: [
+          { min:0, max:4, text:"Minimal depression — no significant symptoms." },
+          { min:5, max:9, text:"Mild depression — consider monitoring and lifestyle support." },
+          { min:10, max:14, text:"Moderate depression — professional consultation recommended." },
+          { min:15, max:19, text:"Moderately severe depression — clinical assessment advised." },
+          { min:20, max:27, text:"Severe depression — urgent mental health support needed." }
+        ],
+        gad7: [
+          { min:0, max:4, text:"Minimal anxiety — within normal range." },
+          { min:5, max:9, text:"Mild anxiety — self-care and stress management." },
+          { min:10, max:14, text:"Moderate anxiety — talk to a professional." },
+          { min:15, max:21, text:"Severe anxiety — clinical evaluation strongly advised." }
+        ]
+      },
+      cssrsInterpret: (hasAnyYes) => hasAnyYes ? "⚠️ Positive risk indicators detected. Please consult a mental health professional as soon as possible." : "No acute suicidal risk indicators in this screening. Continue monitoring as needed."
+    },
+    ru: {
+      mainTitle: "Платформа скрининга психического здоровья",
+      mainSub: "PHQ-9 · GAD-7 · C‑SSRS | результаты и интерпретация",
+      personalInfo: "📋 Личные данные (обязательны, кроме программы)",
+      fullName: "Полное имя *", fullNamePl: "Иванов Иван",
+      email: "Электронная почта *", emailPl: "ivan@example.com",
+      phone: "Телефон (экстренный) *", phonePl: "+7 (701) 123-4567",
+      eduProgram: "Образовательная программа (опционально)", eduProgramPl: "Общая медицина",
+      faculty: "Школа / Факультет *", faculties: ["Медицина","Педиатрия","Стоматология","Фармация","Медико-профилактическое дело","Общественное здоровье","Сестринское дело","Резидентура","Магистратура","Докторантура","Постдокторантура","Не обучаюсь"],
+      groupNum: "Номер группы *", groupNumPl: "302",
+      courseYear: "Курс обучения *", courseYears: ["1 курс","2 курс","3 курс","4 курс","5 курс","6 курс","Не применимо"],
+      phq9Title: "📝 Опросник PHQ-9 (депрессия)", phq9Desc: "За последние 2 недели как часто вас беспокоили следующие проблемы?",
+      gad7Title: "🌿 Опросник GAD-7 (тревога)", gad7Desc: "За последние 2 недели как часто вас беспокоили следующие проблемы?",
+      cssrsTitle: "⚠️ Скрининг C‑SSRS (суицидальный риск)", cssrsDesc: "Колумбийская шкала оценки суицидального риска",
+      options: ["Совсем нет (0)", "Несколько дней (1)", "Более половины дней (2)", "Почти каждый день (3)"],
+      yesNo: ["Нет (0)", "Да (1)"],
+      submit: "Отправить и увидеть результат", reset: "Сбросить",
+      requiredFieldsMsg: "Заполните все обязательные поля: ФИО, Email, Телефон, Факультет, а также Группу и Курс (если студент).",
+      phq9Qs: ["Отсутствие интереса / удовольствия","Подавленность, депрессия","Проблемы со сном","Усталость / нехватка энергии","Нарушения аппетита","Чувство вины / неудачника","Трудности с концентрацией","Замедленность / возбуждение","Мысли о смерти / самоповреждении"],
+      gad7Qs: ["Нервозность, тревога","Не могу остановить беспокойство","Чрезмерное беспокойство","Трудно расслабиться","Беспокойство, неусидчивость","Раздражительность","Страх перед чем-то ужасным"],
+      cssrsQs: ["Желание умереть (последний месяц)","Мысли о самоубийстве (последний месяц)","Думали о способе (если Да к В2)","Намерение действовать (высокий риск)","Планирование деталей (высокий риск)","Опишите действия/подготовку (за всё время / 3 месяца)"],
+      cssrsLastPlaceholder: "Опишите любые действия, подготовку или попытки. Если ничего не было: 'Нет'.",
+      warningTitle: "📢 Важное уведомление", warningText: "Опросники — скрининг, не диагноз. При суицидальных мыслях немедленно обратитесь к специалисту.",
+      interpretation: {
+        phq9: [
+          { min:0, max:4, text:"Минимальная депрессия — значимых симптомов нет." },
+          { min:5, max:9, text:"Лёгкая депрессия — рекомендуется наблюдение и поддержка." },
+          { min:10, max:14, text:"Умеренная депрессия — консультация специалиста желательна." },
+          { min:15, max:19, text:"Депрессия средней тяжести — клиническая оценка необходима." },
+          { min:20, max:27, text:"Тяжёлая депрессия — срочная помощь психиатра." }
+        ],
+        gad7: [
+          { min:0, max:4, text:"Минимальная тревога — в пределах нормы." },
+          { min:5, max:9, text:"Лёгкая тревога — управление стрессом, самопомощь." },
+          { min:10, max:14, text:"Умеренная тревога — обратитесь к психологу." },
+          { min:15, max:21, text:"Выраженная тревога — клиническое обследование." }
+        ]
+      },
+      cssrsInterpret: (hasAnyYes) => hasAnyYes ? "⚠️ Обнаружены положительные индикаторы суицидального риска. Пожалуйста, как можно скорее проконсультируйтесь со специалистом в области психического здоровья." : "По результатам скрининга — острых суицидальных рисков не выявлено. При появлении симптомов обращайтесь за помощью."
+    },
+    kk: {
+      mainTitle: "Психикалық денсаулық скрининг платформасы",
+      mainSub: "PHQ-9 · GAD-7 · C‑SSRS | нәтижелер және түсіндірме",
+      personalInfo: "📋 Жеке деректер (міндетті, бағдарламадан басқа)",
+      fullName: "Толық аты-жөні *", fullNamePl: "Аты Жөні",
+      email: "Электронды пошта *", emailPl: "email@example.com",
+      phone: "Телефон (төтенше) *", phonePl: "+7 (777) 123-4567",
+      eduProgram: "Білім бағдарламасы (міндетті емес)", eduProgramPl: "Жалпы медицина",
+      faculty: "Факультет *", faculties: ["Медицина","Педиатрия","Стоматология","Фармация","Медициналық-профилактика ісі","Қоғамдық денсаулық","Мейіргер ісі","Резидентура","Магистратура","Докторантура","Постдокторантура","Оқымаймын"],
+      groupNum: "Топ нөмірі *", groupNumPl: "302",
+      courseYear: "Оқу курсы *", courseYears: ["1 курс","2 курс","3 курс","4 курс","5 курс","6 курс","Қолданылмайды"],
+      phq9Title: "📝 PHQ-9 Депрессия сауалнамасы", phq9Desc: "Соңғы 2 аптада келесі мәселелер сізді қаншалықты мазалады?",
+      gad7Title: "🌿 GAD-7 Мазасыздық сауалнамасы", gad7Desc: "Соңғы 2 аптада келесі мәселелер сізді қаншалықты мазалады?",
+      cssrsTitle: "⚠️ C‑SSRS Суицид тәуекелі", cssrsDesc: "Суицидтілікті бағалаудың Колумбия шкаласы",
+      options: ["Мүлдем жоқ (0)", "Бірнеше күн (1)", "Күннің жартысынан көбінде (2)", "Күн сайын дерлік (3)"],
+      yesNo: ["Жоқ (0)", "Иә (1)"],
+      submit: "Жіберу және нәтиже", reset: "Тазалау",
+      requiredFieldsMsg: "Барлық міндетті өрістерді толтырыңыз: Аты-жөн, Email, Телефон, Факультет, Топ және Курс (егер студент болсаңыз).",
+      phq9Qs: ["Қызығушылықтың төмендеуі","Көңілсіздік, депрессия","Ұйқының бұзылуы","Шаршау, қуаттың болмауы","Тәбеттің өзгеруі","Өзін жаман сезіну, кінә","Назар аудару қиындығы","Қозғалыстың баяулауы / мазасыздық","Өлім немесе өзіне зиян туралы ойлар"],
+      gad7Qs: ["Жүйкелік, мазасыздық","Алаңдауды тоқтата алмау","Шамадан тыс алаңдау","Босаңсу қиындығы","Мазасыздық, орынсыздық","Тітіркену","Қорқыныш сезімі"],
+      cssrsQs: ["Өлуді қалау (өткен ай)","Өзіне қол жұмсау ойлары (өткен ай)","Әдіс туралы ойлау (2-сұрақ Иә болса)","Әрекет ету ниеті (жоғары тәуекел)","Жоспарлау (жоғары тәуекел)","Әрекеттерді/дайындықты сипаттаңыз (барлық уақыт)"],
+      cssrsLastPlaceholder: "Қандай да бір әрекеттер, дайындық немесе талпыныстар болса сипаттаңыз. Болмаса 'Жоқ' деп жазыңыз.",
+      warningTitle: "📢 Маңызды ескерту", warningText: "Бұл сауалнамалар скрининг құралдары. Суицидтік ойлар болса, дереу маманға жүгініңіз.",
+      interpretation: {
+        phq9: [
+          { min:0, max:4, text:"Минималды депрессия — маңызды белгілер жоқ." },
+          { min:5, max:9, text:"Жеңіл депрессия — бақылау және қолдау ұсынылады." },
+          { min:10, max:14, text:"Орташа депрессия — маманмен кеңесу ұсынылады." },
+          { min:15, max:19, text:"Орташа ауыр депрессия — клиникалық тексеру қажет." },
+          { min:20, max:27, text:"Ауыр депрессия — шұғыл көмек керек." }
+        ],
+        gad7: [
+          { min:0, max:4, text:"Минималды мазасыздық — қалыпты жағдай." },
+          { min:5, max:9, text:"Жеңіл мазасыздық — стрессті басқару." },
+          { min:10, max:14, text:"Орташа мазасыздық — психологқа қаралыңыз." },
+          { min:15, max:21, text:"Ауыр мазасыздық — дәрігерге көріну керек." }
+        ]
+      },
+      cssrsInterpret: (hasAnyYes) => hasAnyYes ? "⚠️ Суицидтік тәуекелдің оң көрсеткіштері анықталды. Мүмкіндігінше тезірек психикалық денсаулық маманына жүгініңіз." : "Скрининг бойынша өткір суицидтік тәуекелдер анықталмады. Қажет болса, көмекке жүгініңіз."
+    }
+  };
+
+  let currentLang = "en";
+
+  // ⬇️ ВСТАВЬТЕ СЮДА ВАШ URL из Google Apps Script (шаг 4 инструкции)
+  const WEBHOOK_URL = 'ВСТАВЬТЕ_ВАШ_URL_СЮДА';
+
+  // Отправка в Google Sheets (через Apps Script)
+  async function sendWebhook(payload) {
+    if (!WEBHOOK_URL || WEBHOOK_URL.includes('ВСТАВЬТЕ')) {
+      console.warn('⚠️ Google Apps Script URL не настроен. Данные не отправлены.');
+      return;
+    }
+    try {
+      await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        mode: 'no-cors', // нужно для Google Apps Script с GitHub Pages
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch(e) {
+      console.warn('Ошибка отправки:', e);
+    }
+  }
+
+  // ----- Валидация личных данных (обязательные, кроме программы) -----
+  function validatePersonalData() {
+    const t = TRANSLATIONS[currentLang];
+    const fullName = document.getElementById("personal_fullname")?.value.trim() || "";
+    const email = document.getElementById("personal_email")?.value.trim() || "";
+    const phone = document.getElementById("personal_phone")?.value.trim() || "";
+    const faculty = document.getElementById("personal_faculty")?.value || "";
+    const notStudying = t.faculties[t.faculties.length-1];
+    const isStudent = (faculty && faculty !== notStudying);
+    let groupOk = true, courseOk = true;
+    if (isStudent) {
+      const group = document.getElementById("personal_group")?.value.trim() || "";
+      const course = document.getElementById("personal_course")?.value || "";
+      groupOk = group !== "";
+      courseOk = course !== "";
+    }
+    let isValid = !!(fullName && email && phone && faculty);
+    if (isStudent && (!groupOk || !courseOk)) isValid = false;
+    
+    const highlight = (id, cond) => { let el = document.getElementById(id); if(el) el.classList.toggle("error-input", cond); };
+    highlight("personal_fullname", !fullName);
+    highlight("personal_email", !email);
+    highlight("personal_phone", !phone);
+    highlight("personal_faculty", !faculty);
+    if(isStudent) { highlight("personal_group", !groupOk); highlight("personal_course", !courseOk); }
+    else { highlight("personal_group", false); highlight("personal_course", false); }
+    if (!isValid) alert(t.requiredFieldsMsg);
+    return isValid;
+  }
+
+  function getPersonalData() {
+    const t = TRANSLATIONS[currentLang];
+    const facultyVal = document.getElementById("personal_faculty")?.value || "";
+    const notStudying = t.faculties[t.faculties.length-1];
+    const isStudent = (facultyVal && facultyVal !== notStudying);
+    return {
+      full_name: document.getElementById("personal_fullname")?.value.trim() || "",
+      email: document.getElementById("personal_email")?.value.trim() || "",
+      phone: document.getElementById("personal_phone")?.value.trim() || "",
+      educational_program: document.getElementById("personal_program")?.value.trim() || "",
+      faculty: facultyVal,
+      group: isStudent ? (document.getElementById("personal_group")?.value.trim() || "") : "",
+      course: isStudent ? (document.getElementById("personal_course")?.value || "") : ""
+    };
+  }
+
+
+
+  // Универсальный сбор likert с проверкой пропусков
+  function collectLikertWithCheck(questions, prefix, optList, resultContainerId, callbackWithData) {
+    const answers = [];
+    let allAnswered = true;
+    for (let i = 0; i < questions.length; i++) {
+      const radio = document.querySelector(`input[name="${prefix}_${i}"]:checked`);
+      if (!radio) allAnswered = false;
+      const score = radio ? parseInt(radio.value) : null;
+      const answerText = (score !== null) ? optList[score] : null;
+      answers.push({ question: questions[i], score: score, answerText });
+    }
+    if (!allAnswered) {
+      alert(TRANSLATIONS[currentLang].requiredFieldsMsg ? "Пожалуйста, ответьте на все вопросы перед отправкой." : "Please answer all questions before submitting.");
+      return false;
+    }
+    const totalScore = answers.reduce((sum, a) => sum + (a.score !== null ? a.score : 0), 0);
+    callbackWithData(answers, totalScore);
+    return true;
+  }
+
+  // PHQ-9
+  async function submitPHQ9() {
+    if (!validatePersonalData()) return;
+    const t = TRANSLATIONS[currentLang];
+    const success = collectLikertWithCheck(t.phq9Qs, "phq9", t.options, "phq9_result", async (answers, total) => {
+      const interpretation = t.interpretation.phq9.find(range => total >= range.min && total <= range.max) || { text: "Оценка вне диапазона" };
+      const resultDiv = document.getElementById("phq9_result");
+      resultDiv.style.display = "block";
+      resultDiv.innerHTML = `<div class="result-score">📊 Суммарный балл PHQ-9: ${total} / 27</div>
+                             <div><strong>🔍 Интерпретация:</strong> ${interpretation.text}</div>
+                             <div class="result-interpret">💡 Рекомендация: ${total >= 10 ? "Рекомендована консультация специалиста." : "Обращайте внимание на своё состояние, практикуйте заботу о себе."}</div>`;
+      const personal = getPersonalData();
+      await sendWebhook({ questionnaire: "PHQ-9", language: currentLang, ...personal, responses: answers.map(a=>({question:a.question, answer:a.answerText, score:a.score})), total_score: total, submitted_at: new Date().toISOString() });
+    });
+    if (!success) return;
+  }
+
+  // GAD-7
+  async function submitGAD7() {
+    if (!validatePersonalData()) return;
+    const t = TRANSLATIONS[currentLang];
+    collectLikertWithCheck(t.gad7Qs, "gad7", t.options, "gad7_result", async (answers, total) => {
+      const interpretation = t.interpretation.gad7.find(range => total >= range.min && total <= range.max) || { text: "Оценка вне диапазона" };
+      const resultDiv = document.getElementById("gad7_result");
+      resultDiv.style.display = "block";
+      resultDiv.innerHTML = `<div class="result-score">📊 Суммарный балл GAD-7: ${total} / 21</div>
+                             <div><strong>🔍 Интерпретация:</strong> ${interpretation.text}</div>
+                             <div class="result-interpret">💡 ${total >= 10 ? "Рекомендуется консультация психолога или психотерапевта." : "Уровень тревоги в норме либо незначительный."}</div>`;
+      const personal = getPersonalData();
+      await sendWebhook({ questionnaire: "GAD-7", language: currentLang, ...personal, responses: answers.map(a=>({question:a.question, answer:a.answerText, score:a.score})), total_score: total, submitted_at: new Date().toISOString() });
+    });
+  }
+
+  // C-SSRS (проверяем все первые 5 радио, текстовое поле опционально)
+  async function submitCSSRS() {
+    if (!validatePersonalData()) return;
+    const t = TRANSLATIONS[currentLang];
+    const answers = [];
+    let allRadioAnswered = true;
+    for (let i = 0; i < 5; i++) {
+      const radio = document.querySelector(`input[name="cssrs_${i}"]:checked`);
+      if (!radio) allRadioAnswered = false;
+      const score = radio ? parseInt(radio.value) : null;
+      const answerText = (score !== null) ? t.yesNo[score] : null;
+      answers.push({ question: t.cssrsQs[i], score: score, answerText });
+    }
+    if (!allRadioAnswered) {
+      alert("Пожалуйста, ответьте на все первые 5 вопросов C-SSRS (Да/Нет).");
+      return;
+    }
+    const textArea = document.getElementById("cssrs_last_text");
+    const lastAnswer = textArea ? textArea.value.trim() : "";
+    answers.push({ question: t.cssrsQs[5], score: null, answerText: lastAnswer || "Нет ответа" });
+    const hasAnyYes = answers.slice(0,5).some(a => a.score === 1);
+    const resultDiv = document.getElementById("cssrs_result");
+    resultDiv.style.display = "block";
+    resultDiv.innerHTML = `<div class="result-score">⚠️ C-SSRS скрининг: ${hasAnyYes ? "ПОЛОЖИТЕЛЬНЫЙ (риск)" : "ОТРИЦАТЕЛЬНЫЙ (низкий риск)"}</div>
+                           <div><strong>🔍 Интерпретация:</strong> ${t.cssrsInterpret(hasAnyYes)}</div>
+                           <div class="result-interpret">${hasAnyYes ? "❗ Настоятельно рекомендуем немедленно обратиться к психиатру или психологу." : "Регулярно следите за своим состоянием и при ухудшении обращайтесь за помощью."}</div>`;
+    const personal = getPersonalData();
+    await sendWebhook({ questionnaire: "C-SSRS", language: currentLang, ...personal, responses: answers, any_positive_risk: hasAnyYes, submitted_at: new Date().toISOString() });
+  }
+
+  function toggleStudentFields() {
+    const t = TRANSLATIONS[currentLang];
+    const facultySelect = document.getElementById("personal_faculty");
+    if (!facultySelect) return;
+    const notStudying = t.faculties[t.faculties.length-1];
+    const container = document.getElementById("studentFieldsContainer");
+    if (container) container.style.display = (facultySelect.value && facultySelect.value !== notStudying) ? "grid" : "none";
+  }
+
+  function resetRadioGroup(prefix) { document.querySelectorAll(`input[name^="${prefix}_"]`).forEach(r => r.checked = false); }
+  function resetCSSRS() { for(let i=0; i<5; i++) document.querySelectorAll(`input[name="cssrs_${i}"]`).forEach(r => r.checked = false); const txt = document.getElementById("cssrs_last_text"); if(txt) txt.value = ""; }
+
+  function renderApp() {
+    const t = TRANSLATIONS[currentLang];
+    document.getElementById("mainTitle").innerText = t.mainTitle;
+    document.getElementById("mainSub").innerText = t.mainSub;
+    document.getElementById("warningBlock").innerHTML = `<h3>${t.warningTitle}</h3><p>${t.warningText}</p>`;
+    const personalHTML = `
+      <div class="personal-grid">
+        <div class="section-title">${t.personalInfo}</div>
+        <div class="two-cols">
+          <div class="field-group"><label class="field-label">${t.fullName}</label><input type="text" id="personal_fullname" placeholder="${t.fullNamePl}"></div>
+          <div class="field-group"><label class="field-label">${t.email}</label><input type="email" id="personal_email" placeholder="${t.emailPl}"></div>
+        </div>
+        <div class="two-cols">
+          <div class="field-group"><label class="field-label">${t.phone}</label><input type="tel" id="personal_phone" placeholder="${t.phonePl}"></div>
+          <div class="field-group"><label class="field-label">${t.eduProgram}</label><input type="text" id="personal_program" placeholder="${t.eduProgramPl}"></div>
+        </div>
+        <div class="field-group"><label class="field-label">${t.faculty}</label><select id="personal_faculty" onchange="toggleStudentFields()"><option value="">—</option>${t.faculties.map(f => `<option value="${f}">${f}</option>`).join('')}</select></div>
+        <div id="studentFieldsContainer" class="two-cols" style="display:none"><div class="field-group"><label class="field-label">${t.groupNum}</label><input type="text" id="personal_group" placeholder="${t.groupNumPl}"></div><div class="field-group"><label class="field-label">${t.courseYear}</label><select id="personal_course"><option value="">—</option>${t.courseYears.map(y => `<option value="${y}">${y}</option>`).join('')}</select></div></div>
+      </div>`;
+    const phq9Html = t.phq9Qs.map((q,idx)=>`<div class="question-block"><div class="q-text">${idx+1}. ${q}</div><div class="options-grid">${t.options.map((o,oi)=>`<label class="opt-label"><input type="radio" name="phq9_${idx}" value="${oi}"> ${o}</label>`).join('')}</div></div>`).join('');
+    const gad7Html = t.gad7Qs.map((q,idx)=>`<div class="question-block"><div class="q-text">${idx+1}. ${q}</div><div class="options-grid">${t.options.map((o,oi)=>`<label class="opt-label"><input type="radio" name="gad7_${idx}" value="${oi}"> ${o}</label>`).join('')}</div></div>`).join('');
+    const cssrsHtml = t.cssrsQs.map((q,idx)=> idx === 5 ? `<div class="question-block"><div class="q-text">${idx+1}. ${q}</div><textarea id="cssrs_last_text" rows="3" placeholder="${t.cssrsLastPlaceholder}" style="width:100%; padding:12px; border-radius:16px;"></textarea></div>` : `<div class="question-block"><div class="q-text">${idx+1}. ${q}</div><div class="yesno-group">${t.yesNo.map((o,oi)=>`<label class="opt-label"><input type="radio" name="cssrs_${idx}" value="${oi}"> ${o}</label>`).join('')}</div></div>`).join('');
+    const fullHtml = `${personalHTML}<div class="card"><h2>${t.phq9Title}</h2><p class="card-desc">${t.phq9Desc}</p>${phq9Html}<div class="btn-row"><button class="submit" onclick="submitPHQ9()">${t.submit}</button><button class="reset-btn" onclick="resetRadioGroup('phq9')">${t.reset}</button></div><div class="result-box" id="phq9_result"></div></div><div class="card"><h2>${t.gad7Title}</h2><p class="card-desc">${t.gad7Desc}</p>${gad7Html}<div class="btn-row"><button class="submit" onclick="submitGAD7()">${t.submit}</button><button class="reset-btn" onclick="resetRadioGroup('gad7')">${t.reset}</button></div><div class="result-box" id="gad7_result"></div></div><div class="card"><h2>${t.cssrsTitle}</h2><p class="card-desc">${t.cssrsDesc}</p>${cssrsHtml}<div class="btn-row"><button class="submit" onclick="submitCSSRS()">${t.submit}</button><button class="reset-btn" onclick="resetCSSRS()">${t.reset}</button></div><div class="result-box" id="cssrs_result"></div></div>`;
+    document.getElementById("dynamicForms").innerHTML = fullHtml;
+    toggleStudentFields();
+  }
+
+  window.toggleStudentFields = toggleStudentFields;
+  window.resetRadioGroup = resetRadioGroup;
+  window.resetCSSRS = resetCSSRS;
+  window.submitPHQ9 = submitPHQ9;
+  window.submitGAD7 = submitGAD7;
+  window.submitCSSRS = submitCSSRS;
+
+  function setLanguage(lang) {
+    currentLang = lang;
+    document.querySelectorAll(".lang-btn").forEach(btn => btn.classList.toggle("active", btn.getAttribute("data-lang") === lang));
+    renderApp();
+  }
+  document.querySelectorAll(".lang-btn").forEach(btn => btn.addEventListener("click", () => setLanguage(btn.getAttribute("data-lang"))));
+  renderApp();
+</script>
+</body>
+</html>
